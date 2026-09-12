@@ -1,83 +1,158 @@
-import BotaoFavorito from "../components/BotaoFavorito";
 import Image from "next/image";
+import Link from "next/link";
+import BotaoFavorito from "../components/BotaoFavorito";
+import Busca from "../components/Busca";
+import type { Metadata } from "next";
 
-export default async function PaginaCardapio() 
-{
-     const resposta = await fetch('https://api-restaurante-5iqb.onrender.com/api/produtos', {
-        next: {revalidate: 60}
-     });
+export const metadata: Metadata = {
+    title: "Cardápio Completo",
+    description:
+        "Explore nossa seleção de Entradas, Pratos Principais e Sobremesas exclusivas.",
+};
+
+export default async function PaginaCardapio({
+    searchParams,
+}: {
+    searchParams: Promise<{ busca?: string }>;
+}) {
+    const query = (await searchParams)?.busca || "";
+
+    const resposta = await fetch(
+        "https://api-restaurante-5iqb.onrender.com/api/produtos",
+        {
+            next: { revalidate: 60 },
+        }
+    );
 
     const produtos = await resposta.json();
 
+    console.log("Olá, Servidor!");
+
+    const produtosFiltrados = produtos.filter(
+        (prato: { nome: string; descricao: string }) =>
+            prato.nome.toLowerCase().includes(query.toLowerCase()) ||
+            prato.descricao.toLowerCase().includes(query.toLowerCase())
+    );
+
     return (
         <main className="p-10 max-w-7xl mx-auto">
+
             <div className="flex justify-between items-end mb-10">
                 <div>
-                    <h1 className="text-4xl font-bold text-gray-800 font-serif">Nosso Cardápio</h1>
-                    <p className="text-gray-500 mt-2">Pratos artesanais preparados com ingredientes
-                    frescos.</p>
+                    <h1 className="text-4xl font-bold text-gray-800 font-serif">
+                        Nosso Cardápio
+                    </h1>
+
+                    <p className="text-gray-500 mt-2">
+                        Pratos artesanais preparados com ingredientes frescos.
+                    </p>
                 </div>
-                <span className="text-sm bg-gray-100 px-3 py-1 rounded-full text-gray-400">
-                {produtos.length} itens encontrados
+
+                <span className="text-sm bg-gray-100 px-3 py-1 rounded-full text-gray-600">
+                    {produtosFiltrados.length} itens encontrados
                 </span>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {produtos.map((prato : {id:number | string , nome: string, imagem : String, destacado: boolean, categoria: string, descricao : string, preco : Number}) => {
-            
-            
-                const urlImagemLimpa = prato.imagem?.replace(/[<>]/g, '').trim();
-                return (
-                <div key={prato.id} className="bg-white rounded-2xl shadow-md overflow-hidden
-                flex flex-col border border-gray-100 hover:shadow-xl transition-shadow">
-                    <div className="relative h-56 w-full">
-                    {urlImagemLimpa ? (
-                        <Image
-                        src={urlImagemLimpa}
-                        alt={prato.nome || "Foto do prato"}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        unoptimized
-                        />
-                    ) : 
-                    (
-                    <div className="w-full h-full bg-gray-200 flex items-center justify-center
-                    text-gray-400 text-sm">
-                    Sem Imagem
-                    </div>
-                    )}
-                    
-                    {prato.destacado && 
-                    (
-                    <span className="absolute top-4 left-4 bg-orange-600 text-white text-xs
-                    font-bold px-3 py-1 rounded-full shadow-lg">
-                        ESTRELA DA CASA ⭐
-                    </span>
-                    )}
-                    </div>
-                    <div className="p-6 flex flex-col flex-grow">
-                        <div className="flex justify-between items-start mb-2">
-                            <h2 className="text-xl font-bold text-gray-800">{prato.nome}</h2>
-                            <span className="text-xs font-semibold text-orange-600 uppercase
-                            tracking-wider">
-                            {prato.categoria}
-                            </span>
-                        </div>
-                        <p className="text-gray-500 text-sm mb-6 line-clamp-2">
-                        {prato.descricao}
-                        </p>
-                        <div className="mt-auto flex items-center justify-between border-t pt-4">
-                            <span className="text-2xl font-bold text-green-700">
-                            R$ {Number(prato.preco || 0).toFixed(2)}
-                            </span>
-                        <BotaoFavorito />
-                        </div>
-                    </div>
-                </div>
-                );
-            })}
-            </div>
-        </main>
-);
-}
 
+            <div className="mb-10">
+                <Busca />
+            </div>
+
+            {produtosFiltrados.length === 0 ? (
+
+                <div className="text-center py-20 border-2 border-dashed border-gray-100 rounded-3xl">
+                    <p className="text-gray-400 text-xl">
+                        Nenhum prato encontrado para "{query}"
+                    </p>
+
+                    <Link
+                        href="/cardapio"
+                        className="text-orange-600 underline mt-2 block"
+                    >
+                        Limpar busca
+                    </Link>
+                </div>
+
+            ) : (
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    {produtosFiltrados.map(
+                        (prato: {
+                            id: number | string;
+                            imagem: string;
+                            nome: string;
+                            destacado: boolean;
+                            categoria: string;
+                            descricao: string;
+                            preco: number;
+                        }) => (
+
+                            <div
+                                key={prato.id}
+                                className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col border border-gray-100 hover:shadow-xl transition-shadow"
+                            >
+
+                                <div className="relative h-56 w-full">
+
+                                    <Image
+                                        src={prato.imagem}
+                                        alt={prato.nome}
+                                        fill
+                                        className="object-cover"
+                                    />
+
+                                    {prato.destacado && (
+                                        <span className="absolute top-4 left-4 bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                                            ESTRELA DA CASA ⭐
+                                        </span>
+                                    )}
+
+                                </div>
+
+                                <div className="p-6 flex flex-col flex-grow">
+
+                                    <div className="flex justify-between items-start mb-2">
+
+                                        <Link
+                                            href={`/cardapio/${prato.id}`}
+                                            className="hover:opacity-95 transition-opacity"
+                                        >
+                                            <h2 className="text-xl font-bold text-gray-800">
+                                                {prato.nome}
+                                            </h2>
+                                        </Link>
+
+                                        <span className="text-xs font-semibold text-orange-600 uppercase tracking-wider">
+                                            {prato.categoria}
+                                        </span>
+
+                                    </div>
+
+                                    <p className="text-gray-500 text-sm mb-6 line-clamp-2">
+                                        {prato.descricao}
+                                    </p>
+
+                                    <div className="mt-auto flex items-center justify-between border-t pt-4">
+
+                                        <span className="text-2xl font-bold text-green-700">
+                                            R$ {Number(prato.preco || 0).toFixed(2)}
+                                        </span>
+
+                                        <BotaoFavorito />
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        )
+                    )}
+
+                </div>
+
+            )}
+
+        </main>
+    );
+}
