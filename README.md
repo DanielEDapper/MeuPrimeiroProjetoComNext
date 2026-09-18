@@ -26,6 +26,7 @@
 o professor provavelmente irá pedir a entrega dessa pasta, então é importante ficar atento à folha caso ele peça.
 
 - No final desta atividade, é para ficar assim:
+```
 meu-sistema
 ├── src
 |    └── app
@@ -35,6 +36,7 @@ meu-sistema
 |         ├── componentes
 |         └── login
 └── public
+```
 
 </p>
 
