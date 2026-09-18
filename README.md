@@ -46,21 +46,24 @@ meu-sistema
   - Configurar o arquivo globals.css:
       * Nesse arquivo a única alteração a ser feita é deletar totalmente o CSS configurado por padrão e substitui-lo pela
         importação do tailwind no inicio do arquivo
+    <br>
     **Exemplo de importação:**
     ```@import "tailwindcss";```
   
   - Configurar o arquivo layout.tsx:
       - Configurações iniciais:
         * Nesse arquivo será configurado todos os metadados a serem utilizados ao longo do projeto.
-        **Exemplo de importação de Metadado: **
-        ```
+      <br>
+      **Exemplo de importação de Metadado: **
+      ```
         export const metadata = {
           title: "Menu Digital - Restaurante",
           description: "Cardápio digital do Restaurante -Desenvolvido por Isadora no curso de Next.js",
         };
-        ```
+      ```
           
         * Além da configuração dos metadados esse arquivo também será responsável por importar fontes nativas do framework
+      <br>
       **Exemplo de importação de Fontes Nativas:**
       ```const inter = Inter({subsets: ["latin"], variable: "--font-inter"});```
   
