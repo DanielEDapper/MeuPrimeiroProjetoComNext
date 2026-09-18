@@ -61,7 +61,7 @@ meu-sistema
         ```
           
         * Além da configuração dos metadados esse arquivo também será responsável por importar fontes nativas do framework
-        
+        <br>
         **Exemplo de importação de Fontes Nativas:**
           ```const inter = Inter({subsets: ["latin"], variable: "--font-inter"});```
   
