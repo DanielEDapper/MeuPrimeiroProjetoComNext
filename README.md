@@ -46,8 +46,8 @@ meu-sistema
   - Configurar o arquivo globals.css:
       * Nesse arquivo a única alteração a ser feita é deletar totalmente o CSS configurado por padrão e substitui-lo pela
         importação do tailwind no inicio do arquivo
-      **Exemplo de importação:**
-      ```@import "tailwindcss";```
+    **Exemplo de importação:**
+    ```@import "tailwindcss";```
   
   - Configurar o arquivo layout.tsx:
       - Configurações iniciais:
@@ -61,9 +61,8 @@ meu-sistema
         ```
           
         * Além da configuração dos metadados esse arquivo também será responsável por importar fontes nativas do framework
-        <br>
-        **Exemplo de importação de Fontes Nativas:**
-          ```const inter = Inter({subsets: ["latin"], variable: "--font-inter"});```
+      **Exemplo de importação de Fontes Nativas:**
+      ```const inter = Inter({subsets: ["latin"], variable: "--font-inter"});```
   
         * Finalizando, a última responsabilidade do layuot.tsx é realizar a importação de todos os componentes necessários a serem utilizados.
 
