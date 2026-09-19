@@ -2,7 +2,7 @@
 
 ###
 
-<p data-importer="text" align="left">Grupo: Daniel Erthal Dapper</p>
+<p data-importer="text" align="left">Grupo: Daniel Erthal Dapper e Isadora Umlauf</p>
 
 ###
 
